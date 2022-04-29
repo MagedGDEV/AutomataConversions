@@ -1,5 +1,6 @@
 import json
 from tokenize import String
+from typing import Dict
 
 # This file is code that deals with json file
 # create, insert, modify
@@ -14,9 +15,9 @@ NFA = {
 
 #NFA["S0"].update ({"a": ["S1", "S2"]})
 
-def addTransition(currentState: String, goingState: String, transition: String):
+def addTransition(currentState: String, goingState: String, transition: String, stateData: Dict):
 
-    state = NFA[currentState]
+    state = stateData[currentState]
     # check if the transition is not available
     if state.get(transition) != None:
         # if transition is not available
@@ -27,22 +28,19 @@ def addTransition(currentState: String, goingState: String, transition: String):
         state.update({transition: [goingState]})
 
 
-def createNewState(state: String):
+def createNewState(state: String, stateData: Dict):
     # check if the state is not available
-    if NFA.get(state) != None:
+    if stateData.get(state) != None:
         # if available return
         return
     else:
         # not available create the new state
-        NFA.update({state: {"IsTerminating": False}})
+        stateData.update({state: {"IsTerminating": False}})
         #NFA[state].update({"IsTerminating": False})
         pass
 
-createNewState("S2")
-addTransition('S0', 'S3', 'b')
-addTransition ('S0', 'S3', 'c')
-addTransition('S0', 'S4', 'b')
-addTransition('S2', 'S3', 'b')
 
-with open("NFA.json", "w") as outfile:
-    json.dump(NFA, outfile)
+def createJSONFile(fileName: String, stateData: Dict): 
+    with open(fileName, "w") as outfile:
+        json.dump(stateData, outfile)
+
