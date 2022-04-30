@@ -6,28 +6,10 @@
             "S1"
         ]
     },
-    "S1": {
-        "IsTerminating": false,
-        "3": [
-            "S2"
-        ]
-    },
-    "S2": {
-        "IsTerminating": false,
-        "3": [
-            "S3"
-        ]
-    },
-    "S3": {
+    "S6": {
         "IsTerminating": false,
         "4": [
-            "S4"
-        ]
-    },
-    "S4": {
-        "IsTerminating": false,
-        "2": [
-            "S5"
+            "S7"
         ]
     },
     "S5": {
@@ -36,10 +18,28 @@
             "S6"
         ]
     },
-    "S6": {
+    "S4": {
+        "IsTerminating": false,
+        "2": [
+            "S5"
+        ]
+    },
+    "S3": {
         "IsTerminating": false,
         "4": [
-            "S7"
+            "S4"
+        ]
+    },
+    "S2": {
+        "IsTerminating": false,
+        "3": [
+            "S3"
+        ]
+    },
+    "S1": {
+        "IsTerminating": false,
+        "3": [
+            "S2"
         ]
     }
 }

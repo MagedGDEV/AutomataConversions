@@ -12,10 +12,10 @@ NFA = {
     }
 }
 
-
-#NFA["S0"].update ({"a": ["S1", "S2"]})
-
 def addTransition(currentState: String, goingState: String, transition: String, stateData: Dict):
+
+    # add the new state if it's not available 
+    createNewState(currentState, stateData)
 
     state = stateData[currentState]
     # check if the transition is not available

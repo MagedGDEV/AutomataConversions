@@ -1,34 +1,52 @@
-from ctypes.wintypes import CHAR
-from tkinter import W
 import jsonManager
 from tokenize import String
 import sys
 
-specialChars = ["*", "+", "?", "\\", "[", "]", "(", ")", "{", "}", "|", "ε"]
+specialChar = {
+    "star": "*",
+    "Or" : "|",
+    "plus": "+",
+    "conc": ".",
+    "openingBrac" : "(",
+    "closingBrac" : ")",
+    "openingSqBrac" : "[",
+    "closingSqBrac" : "]",
+    "openingCuBrac" : "{",
+    "closingCuBrac" : "}"
+}
+
 regex = sys.argv[2]
 regexSize: int = len(regex)
-currentState: String = "S"
-goingState:String = "S"
-count: int = 0
+
+# def addConcSymbol(regex): 
+#     stack = []
+#     res = ""
+#     for regChar in regex:
+#         if regChar not in specialChar or regChar == "*" or regChar == "+":
+#             res+=regChar
+#         elif regChar == ")":
+#             while len(regChar) > 0 and stack[-1] != "(":
+#                 res += stack.pop()
+#             stack.pop()
+#         elif regChar == "(":
+#             stack.append(regChar)
+#         elif len(stack) == 0 or stack[-1] == "(":
+#             stack.append(regChar)
 
 
-def handleCharacterTransition (reChar: String, count:int):
-
-    if (reChar not in specialChars):
-        currentState = "S" + str(count)
-        goingState = "S" + str(count + 1)
-        jsonManager.addTransition (currentState, goingState, reChar, jsonManager.NFA)
-    pass
-
-def handeCharacterTerminationState(reChar:String):
-    pass
-
-while (regexSize != count):
-    jsonManager.createNewState ("S" + str(count), jsonManager.NFA)
-    handleCharacterTransition (regex[count], count)
-    count = count + 1
+#jsonManager.createJSONFile("NFA.json", jsonManager.NFA)
 
 
+def computeNFA (regex, count, regSize):
+
+    
+    if (count  != regSize ):
+        regChar = regex[0]
+        if (regChar not in specialChar):
+            computeNFA (regex[1:], count + 1, regexSize)
+            jsonManager.addTransition("S" + str(count), "S" + str(count + 1), regChar, jsonManager.NFA)
+
+
+
+computeNFA (regex, 0, regexSize)
 jsonManager.createJSONFile("NFA.json", jsonManager.NFA)
-
-
