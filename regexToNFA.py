@@ -41,10 +41,9 @@ def addConcatinationSymbol(regex, regSize):
             concRegex += "." 
         elif (regex[i] == ")" or regex[i] == "]") and regex[i+1] not in specialChar:
             concRegex += "."
-        
-    
 
-    print (concRegex)
-    
+def compPrecedence (first, second):
+    precedence = ["|", ".", "+", "*"]
+    return precedence.index(first) > precedence.index (second)
 
 addConcatinationSymbol (regex, regSize)
