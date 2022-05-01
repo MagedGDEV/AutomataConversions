@@ -126,9 +126,8 @@ def computeExpressionTree(postFix, postSize):
         else:
             value = ""
             if (postChar == "["):
-                if (postChar == "["):
-                    for j in range(5):
-                        value += postFix[i+j]
+                for j in range(5):
+                    value += postFix[i+j]
                 i += 4
                 
                 stack.append(ExpressionTree(RegexType.Character, value))
