@@ -42,5 +42,5 @@ def createNewState(state: String, stateData: Dict):
 
 def createJSONFile(fileName: String, stateData: Dict): 
     with open(fileName, "w") as outfile:
-        json.dump(stateData, outfile)
+        json.dump(stateData, outfile, indent= 4)
 

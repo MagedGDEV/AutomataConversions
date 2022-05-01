@@ -1,4 +1,6 @@
 
+from pickle import TRUE
+from turtle import st
 from typing import Concatenate
 import jsonManager
 import sys
@@ -127,7 +129,7 @@ def computeExpressionTree(postFix, postSize):
             tree.left = stack.pop()
             stack.append(tree)
         elif postChar == "+":
-            tree = ExpressionTree(RegexType.STAR)
+            tree = ExpressionTree(RegexType.PLUS)
             tree.left = stack.pop()
             stack.append(tree)
         else:
@@ -209,18 +211,27 @@ def computeRegex (expTree):
     else: 
         return doChar(expTree)
 
-def arrangeNFA (computedRegex):
+def arrangeNFA(computedRegex):
     
-    arrangeTransitions (computedRegex[0], [], {computedRegex[0] : 1})
-    pass
+    global transitions
+    transitions = []
+
+    arrangeTransitions(computedRegex[0], [], {computedRegex[0] : 1})
+    isTerminating()
+    
 
 def isTerminating ():
+    global transitions
+    
+    for state in jsonManager.NFA:
+        if (len (jsonManager.NFA[state]) == 1):
+            jsonManager.NFA[state]["IsTerminating"] = True
+           
 
-    for state in jsonManager.NFA
-    pass
 
 def arrangeTransitions (state, statesDone, symbolTable):
 
+    global transitions
     if state in statesDone : 
         return
     statesDone.append (state)
@@ -230,12 +241,9 @@ def arrangeTransitions (state, statesDone, symbolTable):
             if nextSymbol not in symbolTable:
                 symbolTable[nextSymbol] = sorted(symbolTable.values())[-1] + 1
                 jsonManager.createNewState ("S" + str (symbolTable[nextSymbol]), jsonManager.NFA)
+            transitions.append (["S" + str (symbolTable[state]), symbol, "S" + str (symbolTable[nextSymbol])])
             jsonManager.addTransition ("S" + str (symbolTable[state]), symbol, "S" + str (symbolTable[nextSymbol]), jsonManager.NFA)
             arrangeTransitions (nextSymbol, statesDone, symbolTable)
-
-    pass
-
-
 
 regex = sys.argv[2]
 
@@ -243,6 +251,6 @@ concatenatedRegex = addConcatenationSymbol(regex, len(regex))
 postFix = getPostFix(concatenatedRegex, len(concatenatedRegex))
 expTree = computeExpressionTree(postFix, len(postFix))
 computedRegex = computeRegex(expTree)
-arrangeNFA (computedRegex)
+arrangeNFA(computedRegex)
 jsonManager.createJSONFile ("NFA.json", jsonManager.NFA)
 
