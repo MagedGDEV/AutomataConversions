@@ -1,4 +1,5 @@
-from goto import with_goto
+
+from typing import Concatenate
 import jsonManager
 import sys
 
@@ -136,7 +137,7 @@ def computeExpressionTree(postFix, postSize):
                     for j in range(5):
                         value += postFix[i+j]
                 i += 4
-                print (value)
+                
                 stack.append(ExpressionTree(RegexType.Character, value))
             else:
                 stack.append(ExpressionTree(RegexType.Character, postChar))
@@ -144,8 +145,74 @@ def computeExpressionTree(postFix, postSize):
     return stack[0]
 
 
+def doConcatenation(expTree):
+    
+    leftNFA = computeRegex(expTree.left)
+    rightNFA = computeRegex(expTree.right)
+
+    leftNFA[1].next_state["epsilon"] = [rightNFA[0]]
+    return leftNFA[0], rightNFA[1]
+
+def doOR(expTree):
+    
+    start = State()
+    end = State()
+
+    firstNFA = computeRegex(expTree.left)
+    secondNFA = computeRegex(expTree.right)
+
+    start.next_state["epsilon"] = [firstNFA[0], secondNFA[0]]
+    firstNFA[1].next_state["epsilon"] = [end]
+    secondNFA[1].next_state["epsilon"] = [end]
+    return start, end
+
+def doSTAR (expTree):
+
+    start = State()
+    end = State()
+
+    starred_nfa = computeRegex(expTree.left)
+
+    start.next_state["epsilon"] = [starred_nfa[0], end]
+    starred_nfa[1].next_state["epsilon"] = [starred_nfa[0], end]
+
+    return start, end
+    
+def doPLUS (expTree):
+    start = State()
+    end = State()
+
+    starred_nfa = computeRegex(expTree.left)
+
+    start.next_state["epsilon"] = [starred_nfa[0]]
+    starred_nfa[1].next_state["epsilon"] = [starred_nfa[0], end]
+
+    return start, end
+
+
+def doChar (expTree):
+    start = State ()
+    end = State()
+    start.next_state[expTree.value] = [end]
+    return start, end
+
+def computeRegex (expTree):
+
+    if expTree.charType == RegexType.Concatenate:
+        return doConcatenation(expTree)
+    elif expTree.charType == RegexType.OR:
+        return doOR(expTree)
+    elif expTree.charType == RegexType.STAR:
+        return doSTAR(expTree)
+    elif expTree.charType == RegexType.PLUS:
+        return doPLUS(expTree)
+    else: 
+        return doChar(expTree)
+
 regex = sys.argv[2]
 
 concatenatedRegex = addConcatenationSymbol(regex, len(regex))
 postFix = getPostFix(concatenatedRegex, len(concatenatedRegex))
 expTree = computeExpressionTree(postFix, len(postFix))
+computedRegex = computeRegex(expTree)
+
