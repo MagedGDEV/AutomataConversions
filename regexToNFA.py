@@ -209,10 +209,40 @@ def computeRegex (expTree):
     else: 
         return doChar(expTree)
 
+def arrangeNFA (computedRegex):
+    
+    arrangeTransitions (computedRegex[0], [], {computedRegex[0] : 1})
+    pass
+
+def isTerminating ():
+
+    for state in jsonManager.NFA
+    pass
+
+def arrangeTransitions (state, statesDone, symbolTable):
+
+    if state in statesDone : 
+        return
+    statesDone.append (state)
+
+    for symbol in list (state.next_state):
+        for nextSymbol in state.next_state[symbol]:
+            if nextSymbol not in symbolTable:
+                symbolTable[nextSymbol] = sorted(symbolTable.values())[-1] + 1
+                jsonManager.createNewState ("S" + str (symbolTable[nextSymbol]), jsonManager.NFA)
+            jsonManager.addTransition ("S" + str (symbolTable[state]), symbol, "S" + str (symbolTable[nextSymbol]), jsonManager.NFA)
+            arrangeTransitions (nextSymbol, statesDone, symbolTable)
+
+    pass
+
+
+
 regex = sys.argv[2]
 
 concatenatedRegex = addConcatenationSymbol(regex, len(regex))
 postFix = getPostFix(concatenatedRegex, len(concatenatedRegex))
 expTree = computeExpressionTree(postFix, len(postFix))
 computedRegex = computeRegex(expTree)
+arrangeNFA (computedRegex)
+jsonManager.createJSONFile ("NFA.json", jsonManager.NFA)
 

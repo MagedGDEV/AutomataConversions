@@ -6,8 +6,8 @@ from typing import Dict
 # create, insert, modify
 
 NFA = {
-    "StartingState": "S0",
-    "S0": {
+    "StartingState": "S1",
+    "S1": {
         "IsTerminating": False,
     }
 }
