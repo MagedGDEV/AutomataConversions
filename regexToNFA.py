@@ -1,9 +1,7 @@
-
-from pickle import TRUE
-from turtle import st
-from typing import Concatenate
+from colorama import Style
 import jsonManager
 import sys
+from graphviz import Digraph
 
 specialChar = [
     "*",
@@ -20,7 +18,6 @@ specialChar = [
     "-",
     "epsilon"
 ]
-
 
 def addConcatenationSymbol(regex, regSize):
 
@@ -45,11 +42,9 @@ def addConcatenationSymbol(regex, regSize):
     concRegex += regex[-1]
     return concRegex
 
-
 def compPrecedence(first, second):
     precedence = ["|", ".", "+", "*"]
     return precedence.index(first) > precedence.index(second)
-
 
 def getPostFix(concatenatedRegex, concSize):
 
@@ -86,7 +81,6 @@ def getPostFix(concatenatedRegex, concSize):
 
     return postFix
 
-
 class RegexType:
     Character = 1
     Concatenate = 2
@@ -94,11 +88,9 @@ class RegexType:
     STAR = 4
     PLUS = 5
 
-
 class State:
     def __init__(self):
         self.next_state = {}
-
 
 class ExpressionTree:
     def __init__(self, charType, value=None):
@@ -106,7 +98,6 @@ class ExpressionTree:
         self.value = value
         self.left = None
         self.right = None
-
 
 def computeExpressionTree(postFix, postSize):
 
@@ -145,7 +136,6 @@ def computeExpressionTree(postFix, postSize):
                 stack.append(ExpressionTree(RegexType.Character, postChar))
         i += 1
     return stack[0]
-
 
 def doConcatenation(expTree):
     
@@ -191,7 +181,6 @@ def doPLUS (expTree):
 
     return start, end
 
-
 def doChar (expTree):
     start = State ()
     end = State()
@@ -217,8 +206,7 @@ def arrangeNFA(computedRegex):
     transitions = []
 
     arrangeTransitions(computedRegex[0], [], {computedRegex[0] : 1})
-    isTerminating()
-    
+    isTerminating() 
 
 def isTerminating ():
     global transitions
@@ -227,8 +215,6 @@ def isTerminating ():
         if (len (jsonManager.NFA[state]) == 1):
             jsonManager.NFA[state]["IsTerminating"] = True
            
-
-
 def arrangeTransitions (state, statesDone, symbolTable):
 
     global transitions
@@ -242,8 +228,29 @@ def arrangeTransitions (state, statesDone, symbolTable):
                 symbolTable[nextSymbol] = sorted(symbolTable.values())[-1] + 1
                 jsonManager.createNewState ("S" + str (symbolTable[nextSymbol]), jsonManager.NFA)
             transitions.append (["S" + str (symbolTable[state]), symbol, "S" + str (symbolTable[nextSymbol])])
-            jsonManager.addTransition ("S" + str (symbolTable[state]), symbol, "S" + str (symbolTable[nextSymbol]), jsonManager.NFA)
+            jsonManager.addTransition ("S" + str (symbolTable[state]), "S" + str (symbolTable[nextSymbol]), symbol, jsonManager.NFA)
             arrangeTransitions (nextSymbol, statesDone, symbolTable)
+
+def setTerminatingNode(graph):
+    for state in jsonManager.NFA:
+        if (state != "StartingState"):
+            if jsonManager.NFA[state]["IsTerminating"] == False:
+                graph.attr('node', shape = 'circle')
+                graph.node(state)
+                if state == 'S1':
+                    graph.attr('node', shape='none')
+                    graph.node('')
+                    graph.edge("", state)
+            else:
+                graph.attr('node', shape = 'doublecircle')
+                graph.node(state)
+
+def setTransistions(graph):
+    global transitions
+    for transition in transitions:
+        graph.edge(transition[0], transition[2], label=('ε', transition[1])[transition[1] != 'epsilon'])
+        
+
 
 regex = sys.argv[2]
 
@@ -254,3 +261,8 @@ computedRegex = computeRegex(expTree)
 arrangeNFA(computedRegex)
 jsonManager.createJSONFile ("NFA.json", jsonManager.NFA)
 
+finiteGraph = Digraph(graph_attr={'rankdir': 'LR'})
+
+setTerminatingNode (finiteGraph)
+setTransistions(finiteGraph)
+finiteGraph.render("NFA", view =True, format= 'png', overwrite_source= True)

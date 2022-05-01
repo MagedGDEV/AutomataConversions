@@ -1,45 +1,101 @@
 {
-    "StartingState": "S0",
-    "S0": {
+    "StartingState": "S1",
+    "S1": {
         "IsTerminating": false,
-        "2": [
-            "S1"
+        "1": [
+            "S2"
         ]
     },
-    "S6": {
+    "S2": {
         "IsTerminating": false,
-        "4": [
-            "S7"
+        "epsilon": [
+            "S3"
         ]
     },
-    "S5": {
+    "S3": {
         "IsTerminating": false,
-        "3": [
+        "epsilon": [
+            "S4",
             "S6"
         ]
     },
     "S4": {
         "IsTerminating": false,
-        "2": [
+        "0": [
             "S5"
         ]
     },
-    "S3": {
+    "S5": {
         "IsTerminating": false,
-        "4": [
-            "S4"
+        "epsilon": [
+            "S4",
+            "S6"
         ]
     },
-    "S2": {
+    "S6": {
         "IsTerminating": false,
-        "3": [
-            "S3"
+        "epsilon": [
+            "S7"
         ]
     },
-    "S1": {
+    "S7": {
         "IsTerminating": false,
-        "3": [
-            "S2"
+        "1": [
+            "S8"
+        ]
+    },
+    "S8": {
+        "IsTerminating": false,
+        "epsilon": [
+            "S9"
+        ]
+    },
+    "S9": {
+        "IsTerminating": false,
+        "epsilon": [
+            "S10",
+            "S14"
+        ]
+    },
+    "S10": {
+        "IsTerminating": false,
+        "epsilon": [
+            "S11",
+            "S15"
+        ]
+    },
+    "S11": {
+        "IsTerminating": false,
+        "1": [
+            "S12"
+        ]
+    },
+    "S12": {
+        "IsTerminating": false,
+        "epsilon": [
+            "S13"
+        ]
+    },
+    "S13": {
+        "IsTerminating": false,
+        "epsilon": [
+            "S10",
+            "S14"
+        ]
+    },
+    "S14": {
+        "IsTerminating": true
+    },
+    "S15": {
+        "IsTerminating": false,
+        "0": [
+            "S16"
+        ]
+    },
+    "S16": {
+        "IsTerminating": false,
+        "epsilon": [
+            "S13"
         ]
     }
 }

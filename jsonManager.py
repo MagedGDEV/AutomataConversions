@@ -2,6 +2,7 @@ import json
 from tokenize import String
 from typing import Dict
 
+
 # This file is code that deals with json file
 # create, insert, modify
 
@@ -11,6 +12,8 @@ NFA = {
         "IsTerminating": False,
     }
 }
+
+
 
 def addTransition(currentState: String, goingState: String, transition: String, stateData: Dict):
 
