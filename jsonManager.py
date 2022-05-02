@@ -17,6 +17,10 @@ DFA = {
     "StartingState": "S1",
 }
 
+minDFA = {
+    "StartingState": "S1",
+}
+
 def addTransition(currentState: String, goingState: String, transition: String, stateData: Dict):
 
     # add the new state if it's not available 
