@@ -14,7 +14,7 @@ NFA = {
 
 DFA = {
     
-    
+    "StartingState": "S1",
 }
 
 def addTransition(currentState: String, goingState: String, transition: String, stateData: Dict):

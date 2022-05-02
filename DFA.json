@@ -1,0 +1,48 @@
+{
+    "StartingState": "S1",
+    "S1S2S3S15": {
+        "IsTerminating": false,
+        "a": [
+            "S2S3S4S5S6S7S8S9S13S15"
+        ],
+        "b": [
+            "S2S3S5S6S7S8S9S13S15S16"
+        ]
+    },
+    "S2S3S4S5S6S7S8S9S13S15": {
+        "IsTerminating": false,
+        "a": [
+            "S2S3S4S5S6S7S8S9S10S11S12S13S15"
+        ],
+        "b": [
+            "S2S3S5S6S7S8S9S11S12S13S14S15S16"
+        ]
+    },
+    "S2S3S5S6S7S8S9S13S15S16": {
+        "IsTerminating": false,
+        "a": [
+            "S2S3S4S5S6S7S8S9S10S11S12S13S15"
+        ],
+        "b": [
+            "S2S3S5S6S7S8S9S11S12S13S14S15S16"
+        ]
+    },
+    "S2S3S4S5S6S7S8S9S10S11S12S13S15": {
+        "IsTerminating": false,
+        "a": [
+            "S2S3S4S5S6S7S8S9S10S11S12S13S15"
+        ],
+        "b": [
+            "S2S3S5S6S7S8S9S11S12S13S14S15S16"
+        ]
+    },
+    "S2S3S5S6S7S8S9S11S12S13S14S15S16": {
+        "IsTerminating": false,
+        "a": [
+            "S2S3S4S5S6S7S8S9S10S11S12S13S15"
+        ],
+        "b": [
+            "S2S3S5S6S7S8S9S11S12S13S14S15S16"
+        ]
+    }
+}

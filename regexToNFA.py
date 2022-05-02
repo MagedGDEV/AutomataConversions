@@ -249,7 +249,11 @@ def setTransistions(graph):
     for transition in transitions:
         graph.edge(transition[0], transition[2], label=('ε', transition[1])[transition[1] != 'epsilon'])
         
-
+fileName = "NFA.json"
+file = "NFA"
+if (len(sys.argv) == 6):
+    fileName = sys.argv[4]
+    file = sys.argv[5]
 
 regex = sys.argv[2]
 
@@ -258,10 +262,10 @@ postFix = getPostFix(concatenatedRegex, len(concatenatedRegex))
 expTree = computeExpressionTree(postFix, len(postFix))
 computedRegex = computeRegex(expTree)
 arrangeNFA(computedRegex)
-jsonManager.createJSONFile ("NFA.json", jsonManager.NFA)
+jsonManager.createJSONFile (fileName, jsonManager.NFA)
 
 finiteGraph = Digraph(graph_attr={'rankdir': 'LR'})
 
 setTerminatingNode (finiteGraph)
 setTransistions(finiteGraph)
-finiteGraph.render("NFA", view =True, format= 'png', overwrite_source= True)
+finiteGraph.render(file, view =True, format= 'png', overwrite_source= True)
