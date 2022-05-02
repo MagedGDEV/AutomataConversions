@@ -120,6 +120,57 @@ def computeStateName (state):
         stateName += nfaStates[s]
     return stateName
 
+def computeSimplifiedDFA(DFA):
+    global dfaTransitions
+    stateDict = dict()
+    count = 1
+    newDFA = {
+        "StartingState": "S1",
+    }
+    for state in DFA:
+        if (state == "StartingState"):
+            continue
+        else:
+            stateDict [state] = count
+            count += 1
+    
+    for state in DFA:
+        if (state == "StartingState"):
+            continue
+        else:
+            jsonManager.createNewState("S" + str(stateDict[state]), newDFA)
+            for transition in DFA[state]:
+                if transition == "IsTerminating":
+                    if DFA[state]["IsTerminating"] == True:
+                        newDFA["S" + str(stateDict[state])]["IsTerminating"] = True
+                else:
+                    for goState in DFA[state][transition]:
+                        jsonManager.addTransition("S" + str(stateDict[state]), "S" + str(stateDict[goState]), transition, newDFA)
+                        dfaTransitions.append(["S" + str(stateDict[state]),transition ,"S" + str(stateDict[goState])])
+    
+    return newDFA
+
+def setTerminatingNode(graph):
+
+    for state in jsonManager.DFA:
+        if (state != "StartingState"):
+            if jsonManager.DFA[state]["IsTerminating"] == False:
+                graph.attr('node', shape = 'circle')
+                graph.node(state)
+                if state == 'S1':
+                    graph.attr('node', shape='none')
+                    graph.node('')
+                    graph.edge("", state)
+            else:
+                graph.attr('node', shape = 'doublecircle')
+                graph.node(state)
+
+def setTransistions(graph):
+    global dfaTransitions
+    for transition in dfaTransitions:
+        graph.edge(transition[0], transition[2], label=transition[1])
+    
+
 file = "NFA.json"
 fileName = "DFA.json"
 picFile = "DFA"
@@ -133,6 +184,7 @@ nfaStates = []
 nfaTransitions = []
 nfaSymbols = []
 nfaAccepting = []
+dfaTransitions = []
 fillRequiredData(jsonManager.NFA)
 nfaStatesDic = computeStateDict()
 
@@ -141,15 +193,8 @@ closureStack = [epsilonClosure["S1"]]
 finiteGraph = Digraph(graph_attr={'rankdir': 'LR'})
 
 if (computeTerminatingDFA(closureStack[0])):
-    finiteGraph.attr('node', shape = 'doublecircle')
-else:
-    finiteGraph.attr('node', shape = 'circle')
-finiteGraph.node(computeStateName(closureStack[0]))
-jsonManager.createNewState(computeStateName(closureStack[0]), jsonManager.DFA)
-
-finiteGraph.attr ('node', shape = 'none')
-finiteGraph.node('')
-finiteGraph.edge('',computeStateName(closureStack[0]))
+    jsonManager.createNewState(closureStack[0], jsonManager.DFA)
+    jsonManager.DFA[closureStack[0]]["IsTerminating"] = True
 
 dfaStates = list ()
 dfaStates.append(epsilonClosure["S1"])
@@ -176,13 +221,14 @@ while (len(closureStack)> 0):
                     closureStack.append(list(to))
 
                     if (computeTerminatingDFA(list(to))):
-                        finiteGraph.attr('node', shape = 'doublecircle')
-                    else:
-                        finiteGraph.attr('node', shape = 'circle')
-                    finiteGraph.node(computeStateName(list(to)))
-                finiteGraph.edge (computeStateName(current), computeStateName(list(to)), label= nfaSymbols[symbol])
+                        jsonManager.createNewState(computeStateName(list(to)), jsonManager.DFA)
+                        jsonManager.DFA[computeStateName(list(to))]["IsTerminating"] = True
+                    
                 jsonManager.addTransition(computeStateName(current), computeStateName(list(to)),nfaSymbols[symbol] ,jsonManager.DFA)
-
+            
+jsonManager.DFA = computeSimplifiedDFA(jsonManager.DFA)
+setTerminatingNode(finiteGraph)
+setTransistions(finiteGraph)
 jsonManager.createJSONFile(fileName, jsonManager.DFA)
 finiteGraph.render(picFile, view =True, format= 'png', overwrite_source= True)
 
