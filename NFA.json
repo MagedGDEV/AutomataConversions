@@ -41,7 +41,8 @@
     "S7": {
         "IsTerminating": false,
         "epsilon": [
-            "S8"
+            "S8",
+            "S12"
         ]
     },
     "S8": {

@@ -51,6 +51,7 @@ digraph {
 	S8 -> S13 [label="ε"]
 	S13 -> S14 [label=b]
 	S14 -> S11 [label="ε"]
+	S7 -> S12 [label="ε"]
 	S2 -> S15 [label="ε"]
 	S15 -> S16 [label=b]
 	S16 -> S5 [label="ε"]

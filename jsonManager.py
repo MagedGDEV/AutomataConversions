@@ -37,15 +37,12 @@ def addTransition(currentState: String, goingState: String, transition: String, 
         state.update({transition: [goingState]})
 
 def createNewState(state: String, stateData: Dict):
-    # check if the state is not available
+   
     if stateData.get(state) != None:
-        # if available return
         return
     else:
-        # not available create the new state
         stateData.update({state: {"IsTerminating": False}})
-        #NFA[state].update({"IsTerminating": False})
-        pass
+
 
 def createJSONFile(fileName: String, stateData: Dict): 
     with open(fileName, "w") as outfile:

@@ -1,14 +1,5 @@
 {
     "StartingState": "S1",
-    "A": {
-        "IsTerminating": false,
-        "a": [
-            "B"
-        ],
-        "b": [
-            "C"
-        ]
-    },
     "B": {
         "IsTerminating": false,
         "a": [
@@ -16,15 +7,6 @@
         ],
         "b": [
             "D"
-        ]
-    },
-    "C": {
-        "IsTerminating": false,
-        "a": [
-            "B"
-        ],
-        "b": [
-            "C"
         ]
     },
     "D": {
@@ -38,6 +20,15 @@
     },
     "E": {
         "IsTerminating": true,
+        "a": [
+            "B"
+        ],
+        "b": [
+            "C"
+        ]
+    },
+    "C": {
+        "IsTerminating": false,
         "a": [
             "B"
         ],
