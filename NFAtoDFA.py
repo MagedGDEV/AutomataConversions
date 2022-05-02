@@ -148,6 +148,7 @@ def computeSimplifiedDFA(DFA):
                         jsonManager.addTransition("S" + str(stateDict[state]), "S" + str(stateDict[goState]), transition, newDFA)
                         dfaTransitions.append(["S" + str(stateDict[state]),transition ,"S" + str(stateDict[goState])])
     
+    newDFA["StartingState"]   = "S" + str(stateDict[DFA["StartingState"]])
     return newDFA
 
 def setTerminatingNode(graph):
@@ -157,7 +158,7 @@ def setTerminatingNode(graph):
             if jsonManager.DFA[state]["IsTerminating"] == False:
                 graph.attr('node', shape = 'circle')
                 graph.node(state)
-                if state == 'S1':
+                if state == jsonManager.DFA["StartingState"]:
                     graph.attr('node', shape='none')
                     graph.node('')
                     graph.edge("", state)
@@ -190,11 +191,13 @@ nfaStatesDic = computeStateDict()
 
 epsilonClosure = computeAllEpsilonClosure()
 closureStack = [epsilonClosure["S1"]]
-finiteGraph = Digraph(graph_attr={'rankdir': 'LR'})
+
 
 if (computeTerminatingDFA(closureStack[0])):
-    jsonManager.createNewState(closureStack[0], jsonManager.DFA)
+    
+    jsonManager.createNewState(computeStateName(closureStack[0]), jsonManager.DFA)
     jsonManager.DFA[closureStack[0]]["IsTerminating"] = True
+jsonManager.DFA["StartingState"] = computeStateName(closureStack[0])
 
 dfaStates = list ()
 dfaStates.append(epsilonClosure["S1"])
@@ -225,7 +228,9 @@ while (len(closureStack)> 0):
                         jsonManager.DFA[computeStateName(list(to))]["IsTerminating"] = True
                     
                 jsonManager.addTransition(computeStateName(current), computeStateName(list(to)),nfaSymbols[symbol] ,jsonManager.DFA)
-            
+
+finiteGraph = Digraph(graph_attr={'rankdir': 'LR'})
+
 jsonManager.DFA = computeSimplifiedDFA(jsonManager.DFA)
 setTerminatingNode(finiteGraph)
 setTransistions(finiteGraph)

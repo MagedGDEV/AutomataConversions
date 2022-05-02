@@ -4,6 +4,9 @@ digraph {
 	S1
 	node [shape=circle]
 	S2
+	node [shape=none]
+	""
+	"" -> S2
 	node [shape=doublecircle]
 	S3
 	node [shape=doublecircle]

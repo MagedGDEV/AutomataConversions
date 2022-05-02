@@ -1,19 +1,18 @@
 digraph {
 	graph [rankdir=LR]
 	node [shape=circle]
-	B
-	node [shape=circle]
-	D
+	S2
+	node [shape=none]
+	""
+	"" -> S2
 	node [shape=doublecircle]
-	E
-	node [shape=circle]
-	C
-	B -> B [label=a]
-	B -> D [label=b]
-	D -> B [label=a]
-	D -> E [label=b]
-	E -> B [label=a]
-	E -> C [label=b]
-	C -> B [label=a]
-	C -> C [label=b]
+	S3
+	node [shape=doublecircle]
+	S5
+	S2 -> S1 [label=a]
+	S2 -> S3 [label=b]
+	S3 -> S4 [label=a]
+	S3 -> S5 [label=b]
+	S5 -> S4 [label=a]
+	S5 -> S5 [label=b]
 }

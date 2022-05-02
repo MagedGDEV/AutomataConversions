@@ -13,7 +13,6 @@ NFA = {
 }
 
 DFA = {
-    
     "StartingState": "S1",
 }
 
