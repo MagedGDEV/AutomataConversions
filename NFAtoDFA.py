@@ -165,6 +165,10 @@ def setTerminatingNode(graph):
             else:
                 graph.attr('node', shape = 'doublecircle')
                 graph.node(state)
+                if state == jsonManager.DFA["StartingState"]:
+                    graph.attr('node', shape='none')
+                    graph.node('')
+                    graph.edge("", state)
 
 def setTransistions(graph):
     global dfaTransitions
@@ -196,7 +200,7 @@ closureStack = [epsilonClosure["S1"]]
 if (computeTerminatingDFA(closureStack[0])):
     
     jsonManager.createNewState(computeStateName(closureStack[0]), jsonManager.DFA)
-    jsonManager.DFA[closureStack[0]]["IsTerminating"] = True
+    jsonManager.DFA[computeStateName(closureStack[0])]["IsTerminating"] = True
 jsonManager.DFA["StartingState"] = computeStateName(closureStack[0])
 
 dfaStates = list ()

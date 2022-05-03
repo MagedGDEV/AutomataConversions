@@ -23,12 +23,15 @@ minDFA = {
 def addTransition(currentState: String, goingState: String, transition: String, stateData: Dict):
 
     # add the new state if it's not available 
+    createNewState (goingState,stateData)
     createNewState(currentState, stateData)
-
     state = stateData[currentState]
     # check if the transition is not available
     if state.get(transition) != None:
         # if transition is not available
+        for end in state[transition]:
+            if (end == goingState):
+                return 
         state[transition].append(goingState)
 
     else:

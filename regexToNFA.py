@@ -243,6 +243,10 @@ def setTerminatingNode(graph):
             else:
                 graph.attr('node', shape = 'doublecircle')
                 graph.node(state)
+                if state == jsonManager.NFA["StartingState"]:
+                    graph.attr('node', shape='none')
+                    graph.node('')
+                    graph.edge("", state)
 
 def setTransistions(graph):
     global transitions
