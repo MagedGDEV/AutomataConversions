@@ -81,8 +81,9 @@ def getToStates (DFA, state):
 def checkGroup (end1, end2, stateToGroup):
     
     for i in range (len(end1)):
-        if (stateToGroup[end1[i]] != stateToGroup[end2[i]]):    
-            return False
+        if i in range (len(end2)):
+            if (stateToGroup[end1[i]] != stateToGroup[end2[i]]):    
+                return False
     return True
 
 def getTransitionValue (DFA, start, end):
@@ -101,6 +102,7 @@ def createMinimizedDFA (DFA, MINDFA, groups, stateToGroup):
     global minTransitions
     global dfaIntial
     
+    startSet = True
     for group in groups:
         if (len(group) == 0):
             continue
@@ -109,16 +111,14 @@ def createMinimizedDFA (DFA, MINDFA, groups, stateToGroup):
         if state in dfaAccepting:
             jsonManager.createNewState("S" + str(stateToGroup[state]), MINDFA)
             MINDFA["S" + str(stateToGroup[state])]["IsTerminating"] = True
-        if state == dfaIntial:
-            MINDFA["StartingState"] = "S" + str(stateToGroup[state])
+        if startSet :
+            if stateToGroup[state] == 0:
+                MINDFA["StartingState"] = "S" + str(stateToGroup[state])
+                startSet = False
         for end in next:
             transition = getTransitionValue (DFA,state,end)
             jsonManager.addTransition("S" + str(stateToGroup[state]), "S" + str(stateToGroup[end]), transition, MINDFA)
             minTransitions.append(["S" + str(stateToGroup[state]), transition, "S" + str(stateToGroup[end])])
-            if end in dfaAccepting:
-                MINDFA["S" + str(stateToGroup[end])]["IsTerminating"] = True
-            if end == dfaIntial:
-                MINDFA["StartingState"] = "S" + str(stateToGroup[end])
             
 def minimize (DFA, MINDFA):
     
